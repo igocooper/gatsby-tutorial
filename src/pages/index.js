@@ -11,7 +11,7 @@ const IndexPage = ( { data }) => (
     <ul>
     {data.allMarkdownRemark.edges.map( post => (
       <li key={post.node.id}>
-        <a href={post.node.frontmatter.path}>{post.node.frontmatter.title}</a>
+        <Link href={post.node.frontmatter.path}>{post.node.frontmatter.title}</Link>
       </li>
     ))}
     </ul>
@@ -20,13 +20,19 @@ const IndexPage = ( { data }) => (
 
 export const pageQueary = graphql`
   query IndexQuery {
-      allMarkdownRemark(limit: 10){
+      allMarkdownRemark(
+        limit: 10
+        sort: { fields: [frontmatter___date], order: DESC}
+        filter: { frontmatter: { published: { eq: true } } }
+        ){
       edges {
         node {
           id
           frontmatter {
             title
             path
+            published
+            date
           }
         }
       }
